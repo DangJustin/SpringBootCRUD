@@ -1,49 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import './App.css';
+import Home from './Home.jsx';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import GroupList from './GroupList.jsx';
+import GroupEdit from "./GroupEdit.jsx";
 
 const App = () => {
-    const [groups, setGroups] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        setLoading(true);
-        fetch('api/groups')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("HTTP error " + response.status);
-                }
-                if (response.ok) {
-                    console.log("Success");
-                }
-                return response.json();
-            })
-            .then(data => {
-                setGroups(data);
-                setLoading(false);
-            })
-    }, []);
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
     return (
-        <div className= "App">
-            <header className = "App-header">
-                <img src = {viteLogo} className="App-logo" alt="logo"/>
-                <div className="App-intro">
-                    <h2>Group List</h2>
-                    {groups.map(group =>
-                        <div key={group.id}>
-                            {group.name}
-                        </div>
-                    )}
-                </div>
-            </header>
-        </div>
-    );
-
+        <Router>
+            <Routes>
+                <Route exact path="/" element={<Home/>}/>
+                <Route path='/groups' exact={true} element={<GroupList/>}/>
+                <Route path='/groups/:id' element={<GroupEdit/>}/>
+            </Routes>
+        </Router>
+    )
 }
 
-export default App
+export default App;
